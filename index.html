@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>𝐻𝒶𝓅𝓅𝓎𝒷𝒾𝓇𝓉𝒽𝒹𝒶𝓎</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #d81b60;
+      --text-color: #333;
+      --button-color: #d81b60;
+      --button-hover: #ad1457;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+      background: linear-gradient(to bottom right, #ffe0ef, #fbe9e7);
+      transition: background 2s ease-in-out;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    body.birthday-bg {
+      background: linear-gradient(to bottom right, #f50057, #ffd1dc);
+      
+    }
+    body.birthday-bg,
+html.birthday-bg {
+  background: linear-gradient(to bottom right, #f50057, #ffd1dc);
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+    #countDisplay {
+      font-size: 5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      text-shadow: 0 0 20px #ff8fab;
+      animation: pulseSmooth 1s ease-in-out infinite;
+    }
+
+    @keyframes pulseSmooth {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
+
+    #countingText {
+      font-size: 1.3rem;
+      color: #555;
+      margin-top: 10px;
+      font-weight: 500;
+      animation: blinkTyping 1s steps(1) infinite;
+    }
+
+    @keyframes blinkTyping {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    #birthdayUI {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      animation: popInBounce 1.2s ease-out;
+      position: relative;
+    }
+
+    @keyframes popInBounce {
+      0% { transform: scale(0.2); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    img.illustration {
+      width: 210px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 1s ease-in;
+    }
+
+    @keyframes fadeInUp {
+      0% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .birthday-text {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-color);
+      animation: fadeInUp 1.5s ease;
+    }
+
+    .highlight {
+      color: #ffd1dc;
+    }
+
+    .instruction {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1.7s ease;
+    }
+
+    .next-button {
+      background-color: var(--button-color);
+      color: #fff;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 2s ease;
+    }
+
+    .next-button:hover {
+      background-color: var(--button-hover);
+      transform: scale(1.05);
+    }
+
+    #birthdayAudio {
+      display: none;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: float 4s ease-in-out infinite;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
+    }
+  </style>  
+</head>
+<body>
+  <div id="countDisplay">0</div>
+  <div id="countingText">Counting...</div>
+
+  <div id="birthdayUI">
+    <audio id="birthdayAudio" loop>
+      <source src="happy-birthday-357371.mp3" type="audio/mpeg" />
+    </audio>
+
+    <img src="https://media.tenor.com/tPJaogUqo8wAAAAM/happy-birthday.gif" alt="Birthday Gif" class="illustration" />
+    <div class="birthday-text">
+      𝐻𝒶𝓅𝓅𝓎 𝓑𝓲𝓻𝓉𝓱𝓭𝓪𝔂 <span class="highlight">Niza</span> (｡◕‿◕｡)
+    </div>
+    <div class="instruction">Enjoy the music!</div>
+    <div class="instruction">Click Here to See the Letter</div>
+    <button class="next-button" onclick="nextPage()">Letter ༘*.ﾟ</button>
+  </div>
+
+  <!-- Confetti -->
+  <div class="confetti" style="top: 80%; left: 10%;">🎂</div>
+  <div class="confetti" style="top: 85%; left: 30%;">✨</div>
+  <div class="confetti" style="top: 90%; left: 50%;">💫</div>
+  <div class="confetti" style="top: 95%; left: 70%;">🌟</div>
+  <div class="confetti" style="top: 85%; left: 90%;">🎉</div>
+
+  <script>
+  const countDisplay = document.getElementById("countDisplay");
+  const countingText = document.getElementById("countingText");
+  const birthdayUI = document.getElementById("birthdayUI");
+  const audio = document.getElementById("birthdayAudio");
+
+  let count = 0;
+
+  function getDelay(count) {
+    if (count <= 3) return 700;       // slow
+    if (count <= 8) return 400;       // medium
+    if (count <= 13) return 250;      // faster
+    return 120;                       // fastest (14–18)
+  }
+
+  function countUp() {
+    if (count <= 18) {
+      countDisplay.textContent = count;
+      let delay = getDelay(count);
+      count++;
+
+      if (count === 19) {
+        // Hold "18" for 2 seconds before showing UI
+        setTimeout(() => {
+          countDisplay.style.display = "none";
+          countingText.style.display = "none";
+          birthdayUI.style.display = "flex";
+          document.body.classList.add("birthday-bg");
+          document.documentElement.classList.add("birthday-bg");
+
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => console.log("Autoplay failed:", err));
+          }
+        }, 2000);
+      } else {
+        setTimeout(countUp, delay);
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    countUp();
+  });
+
+  function nextPage() {
+    audio.pause();
+    audio.currentTime = 0;
+    window.location.href = "envelope.html";
+  }
+</script>
+
+</body>
+</html>

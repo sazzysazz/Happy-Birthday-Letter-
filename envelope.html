@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open the Letter</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --pink: #f8b9c6;
+        --deep-pink: #d81b60;
+        --bg-color: #fff0f5;
+        --text-color: #333;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+
+      /* Floating Hearts */
+      .heart {
+        position: absolute;
+        bottom: -50px;
+        font-size: 24px;
+        color: #f06292;
+        animation: floatUp 6s infinite ease-in;
+        opacity: 0.8;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-120vh) scale(1.4);
+          opacity: 0;
+        }
+      }
+
+      .envelope {
+        width: 300px;
+        margin-bottom: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: fadeInUp 1.2s ease-out;
+        cursor: pointer;
+      }
+
+      .message {
+        font-size: 1.2rem;
+        color: var(--text-color);
+        margin-bottom: 2rem;
+        animation: fadeInUp 1.4s ease-out;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 1rem;
+        animation: fadeInUp 1.6s ease-out;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 0.8rem 1.8rem;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: skewX(-20deg);
+        animation: shine 2.5s infinite;
+      }
+
+      @keyframes shine {
+        0% {
+          left: -75%;
+        }
+        100% {
+          left: 125%;
+        }
+      }
+
+      .open-btn {
+        background-color: var(--deep-pink);
+        color: #fff;
+      }
+
+      .open-btn:hover {
+        background-color: #ad1457;
+      }
+
+      .no-btn {
+        background-color: #26a69a;
+        color: #fff;
+      }
+
+      .no-btn:hover {
+        background-color: #1d7f74;
+      }
+
+      /* Popup Letter */
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.7);
+        width: 90%;
+        max-width: 550px;
+        background: linear-gradient(to bottom right, #fff0f5, #ffe6ec);
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+        display: none;
+        z-index: 999;
+        border: 2px solid #f6c7d2;
+        animation: popupOpen 0.5s ease forwards;
+      }
+
+      @keyframes popupOpen {
+        0% {
+          transform: translate(-50%, -50%) scale(0.6);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+
+      .popup-header {
+        background: url("https://i.imgur.com/w1bXj5Q.png") repeat-x;
+        background-size: cover;
+        padding: 16px;
+        text-align: center;
+        color: #880e4f;
+        font-weight: bold;
+        font-size: 1.2rem;
+        position: relative;
+      }
+
+      .popup-close {
+        position: absolute;
+        right: 16px;
+        top: 10px;
+        background: transparent;
+        border: none;
+        font-size: 1.2rem;
+        color: #880e4f;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .popup-body {
+        max-height: 350px;
+        overflow-y: auto;
+        padding: 24px;
+        text-align: left;
+        color: #444;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .popup-body h3 {
+        color: #d81b60;
+        margin-bottom: 14px;
+        text-align: center;
+        font-size: 1.5rem;
+        text-shadow: 1px 1px 2px #f8b9c6;
+      }
+
+      .popup-body::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .popup-body::-webkit-scrollbar-thumb {
+        background: var(--pink);
+        border-radius: 10px;
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .popup-body {
+          font-size: 0.95rem;
+          padding: 20px;
+        }
+
+        .buttons {
+          flex-direction: column;
+          gap: 0.8rem;
+        }
+
+        .message {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Floating hearts -->
+    <div class="heart" style="left: 10%">💗</div>
+    <div class="heart" style="left: 30%; animation-delay: 2s">✨</div>
+    <div class="heart" style="left: 50%; animation-delay: 1s">🎂</div>
+    <div class="heart" style="left: 70%; animation-delay: 3s">✉️</div>
+    <div class="heart" style="left: 90%; animation-delay: 4s">💥</div>
+
+    <!-- Audio -->
+    <audio id="birthdayAudio" loop>
+      <source src="/happy-birthday-to-you-370804.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <img
+      src="envelope.jpg"
+      alt="Pink Envelope"
+      class="envelope"
+      onclick="openLetter()"
+    />
+    <div class="message">Do you want to open it? ヾ(｡ꏿ﹏ꏿ)ﾉﾞ</div>
+
+    <div class="buttons">
+      <button class="btn open-btn" onclick="openLetter()">Open it</button>
+      <button class="btn no-btn" onclick="noThanks()">No Thank q</button>
+    </div>
+
+    <!-- Popup Message -->
+    <div class="popup" id="popup">
+      <div class="popup-header">
+        Ooo.. A message (/◕o◕)/♡ !!
+        <button class="popup-close" onclick="closeLetter()">×</button>
+      </div>
+      <div class="popup-body">
+        <h3>Happy Birthday</h3>
+        <p>
+          Niza! (｡◕‿◕｡)
+        </p>
+        <p>
+          It’s your birthday today. And no I haven’t forgotten. Even though we
+          no longer speak, the date still lingers quietly in the back of my
+          mind. I suppose it always will. So today, from a respectful distance,
+          I’m whispering “Happy Birthday.” Not to disturb your peace or reopen
+          old doors  but simply to honor what once meant so much.
+        </p>
+        <p>Make a wish. I hope it’s a meaningful one.</p>
+        <p>
+          More than anything, I hope you’re doing well  truly. I hope that in
+          the silence of your battles, you’re learning to treat yourself with
+          patience and kindness. Life is rarely easy  it can be heavy,
+          complicated, and overwhelming  but I hope you’re finding your way
+          through it, even in the smallest steps. I hope that with time, you
+          begin to see purpose in the struggles, and perhaps even moments of
+          grace within them.
+        </p>
+        <p>
+          So yes, happy birthday. I sincerely wish you nothing but the best as
+          you move forward. Keep going after your dreams  even slowly, even
+          uncertainly. I’ll always be rooting for you in quiet ways you’ll never
+          hear. Thank you for the memories  for every smile, every tear, every
+          lesson. You made me feel deeply, and that’s something I’ll always be
+          grateful for.
+        </p>
+        <p>
+          We may not have ended as we once imagined, but part of me will always
+          admire the person you are  and perhaps the person you're still
+          becoming. Maybe one day our paths will cross again, gently, as
+          friends… or simply as people who once knew each other well.
+        </p>
+        <p>
+          I’m not writing this to reopen old wounds or stir up past feelings. I
+          know we both have our own lives now, and that’s okay. I’m not asking
+          for anything in return  no replies, no rekindling of what was. This is
+          just a quiet acknowledgment of what we shared, and a wish for your
+          happiness.
+        </p>
+        <p>
+          If I ever fell short, I’m sorry. But I believe we gave each other what
+          we could  the joy, the hurt, the growth. And now, with both grace and
+          finality, I’m releasing what’s left. This isn’t a doorway waiting to
+          be reopened — it’s the gentle closing of a chapter.
+        </p>
+        <p>
+          Please take care of yourself. I mean that more deeply than you know.
+          Stay away from the things that steal your light. Guard your health.
+          And if it’s not too much to ask, send my regards to your family 
+          especially to those who showed kindness to me.<br> Good Bye. <br> 
+          <div style="text-align: right;">CHAO VISAL</div>
+        </p>
+
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script>
+      const birthdayAudio = document.getElementById("birthdayAudio");
+
+      function openLetter() {
+        birthdayAudio.play().catch((error) => {
+          console.log("Audio playback failed:", error);
+        });
+        document.getElementById("popup").style.display = "block";
+      }
+
+      function closeLetter() {
+        birthdayAudio.pause();
+        birthdayAudio.currentTime = 0;
+        document.getElementById("popup").style.display = "none";
+      }
+
+      function noThanks() {
+        window.location.href = "try-again.html";
+      }
+
+      // Optional: add floating hearts dynamically
+      const emojis = ["✉️", "🎂", "💥", "✨", "🎈"];
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.animationDelay = Math.random() * 6 + "s";
+        heart.style.fontSize = 18 + Math.random() * 20 + "px";
+        document.body.appendChild(heart);
+      }
+    </script>
+  </body>
+</html>
