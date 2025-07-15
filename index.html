@@ -10,7 +10,7 @@
       --primary-color: #d81b60;
       --text-color: #333;
       --button-color: #d81b60;
-      --button-hover: #ad1457;
+      --button-hocountDisplayver: #ad1457;
     }
 
     * {
@@ -31,19 +31,15 @@
       flex-direction: column;
     }
 
-    body.birthday-bg {
-      background: linear-gradient(to bottom right, #f50057, #ffd1dc);
-      
-    }
     body.birthday-bg,
-html.birthday-bg {
-  background: linear-gradient(to bottom right, #f50057, #ffd1dc);
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
+    html.birthday-bg {
+      background: linear-gradient(to bottom right, #f50057, #ffd1dc);
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
 
     #countDisplay {
       font-size: 5rem;
@@ -142,6 +138,17 @@ html.birthday-bg {
       display: none;
     }
 
+    #startScreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #countDisplay, #countingText {
+      display: none;
+    }
+
     /* Confetti */
     .confetti {
       position: absolute;
@@ -158,6 +165,10 @@ html.birthday-bg {
   </style>  
 </head>
 <body>
+  <div id="startScreen">
+    <button id="startButton" class="next-button">Start Celebration</button>
+  </div>
+
   <div id="countDisplay">0</div>
   <div id="countingText">Counting...</div>
 
@@ -168,7 +179,7 @@ html.birthday-bg {
 
     <img src="https://media.tenor.com/tPJaogUqo8wAAAAM/happy-birthday.gif" alt="Birthday Gif" class="illustration" />
     <div class="birthday-text">
-      𝐻𝒶𝓅𝓅𝓎 𝓑𝓲𝓻𝓉𝓱𝓭𝓪𝔂 <span class="highlight">Niza</span> (｡◕‿◕｡)
+      𝐻𝒶𝓅𝓅𝓎 𝓑𝓲𝓻𝓉𝒽𝒹𝒶𝓎 <span class="highlight">Niza</span> (｡◕‿◕｡)
     </div>
     <div class="instruction">Enjoy the music!</div>
     <div class="instruction">Click Here to See the Letter</div>
@@ -183,56 +194,70 @@ html.birthday-bg {
   <div class="confetti" style="top: 85%; left: 90%;">🎉</div>
 
   <script>
-  const countDisplay = document.getElementById("countDisplay");
-  const countingText = document.getElementById("countingText");
-  const birthdayUI = document.getElementById("birthdayUI");
-  const audio = document.getElementById("birthdayAudio");
+    const startButton = document.getElementById("startButton");
+    const startScreen = document.getElementById("startScreen");
+    const countDisplay = document.getElementById("countDisplay");
+    const countingText = document.getElementById("countingText");
+    const birthdayUI = document.getElementById("birthdayUI");
+    const audio = document.getElementById("birthdayAudio");
 
-  let count = 0;
+    let count = 0;
 
-  function getDelay(count) {
-    if (count <= 3) return 700;       // slow
-    if (count <= 8) return 400;       // medium
-    if (count <= 13) return 250;      // faster
-    return 120;                       // fastest (14–18)
-  }
+    function getDelay(count) {
+      if (count <= 3) return 700;       // slow
+      if (count <= 8) return 400;       // medium
+      if (count <= 13) return 250;      // faster
+      return 120;                       // fastest (14–18)
+    }
 
-  function countUp() {
-    if (count <= 18) {
-      countDisplay.textContent = count;
-      let delay = getDelay(count);
-      count++;
+    function countUp() {
+      if (count <= 18) {
+        countDisplay.textContent = count;
+        let delay = getDelay(count);
+        count++;
 
-      if (count === 19) {
-        // Hold "18" for 2 seconds before showing UI
-        setTimeout(() => {
-          countDisplay.style.display = "none";
-          countingText.style.display = "none";
-          birthdayUI.style.display = "flex";
-          document.body.classList.add("birthday-bg");
-          document.documentElement.classList.add("birthday-bg");
+        if (count === 19) {
+          // Hold "18" for 2 seconds before showing UI
+          setTimeout(() => {
+            countDisplay.style.display = "none";
+            countingText.style.display = "none";
+            birthdayUI.style.display = "flex";
+            document.body.classList.add("birthday-bg");
+            document.documentElement.classList.add("birthday-bg");
 
-          const playPromise = audio.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(err => console.log("Autoplay failed:", err));
-          }
-        }, 2000);
-      } else {
-        setTimeout(countUp, delay);
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(err => {
+                console.log("Autoplay failed:", err);
+                // Fallback: Prompt user to interact
+                const prompt = document.createElement("div");
+                prompt.innerHTML = `<div class="instruction">Click anywhere to play music!</div>`;
+                birthdayUI.appendChild(prompt);
+                document.body.addEventListener("click", () => {
+                  audio.play().catch(err => console.log("Playback failed:", err));
+                  prompt.remove();
+                }, { once: true });
+              });
+            }
+          }, 2000);
+        } else {
+          setTimeout(countUp, delay);
+        }
       }
     }
-  }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    countUp();
-  });
+    startButton.addEventListener("click", () => {
+      startScreen.style.display = "none";
+      countDisplay.style.display = "block";
+      countingText.style.display = "block";
+      countUp();
+    });
 
-  function nextPage() {
-    audio.pause();
-    audio.currentTime = 0;
-    window.location.href = "envelope.html";
-  }
-</script>
-
+    function nextPage() {
+      audio.pause();
+      audio.currentTime = 0;
+      window.location.href = "envelope.html";
+    }
+  </script>
 </body>
 </html>
