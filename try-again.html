@@ -121,6 +121,17 @@
         transform: scale(1.05);
       }
 
+      .audio-prompt {
+        font-size: 1rem;
+        color: var(--pink);
+        margin: 1rem auto;
+        padding: 0.5rem 1rem;
+        background: #ffe6ec;
+        border-radius: 10px;
+        animation: fadeInUp 1s ease;
+        cursor: pointer;
+      }
+
       @keyframes fadeInDown {
         0% {
           opacity: 0;
@@ -171,8 +182,9 @@
     <div class="heart">💔</div>
 
     <!-- Audio element -->
-    <audio id="bgMusic" loop>
-      <source src="/crying-piano-303708.mp3" type="audio/mpeg" />
+    <audio id="bgMusic" loop muted>
+      <!-- Replace with the correct path to your audio file -->
+      <source src="crying-piano-303708.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
@@ -189,28 +201,46 @@
 
     <script>
       const bgMusic = document.getElementById("bgMusic");
+      const exitContainer = document.querySelector(".exit-container");
 
       window.addEventListener("DOMContentLoaded", function () {
-        bgMusic.muted = true;
-        bgMusic
-          .play()
-          .then(() => {
-            setTimeout(() => {
-              bgMusic.muted = false;
-            }, 500);
-          })
-          .catch(() => {
-            document.body.addEventListener("click", function firstClick() {
-              bgMusic.muted = false;
-              bgMusic.play();
-              document.body.removeEventListener("click", firstClick);
+        console.log("Page loaded, attempting to play audio");
+        bgMusic.muted = true; // Start muted to bypass autoplay restrictions
+        const playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log("Audio started playing (muted)");
+              // Unmute after a short delay
+              setTimeout(() => {
+                bgMusic.muted = false;
+                console.log("Audio unmuted");
+              }, 500);
+            })
+            .catch((error) => {
+              console.log("Audio playback failed:", error);
+              // Show fallback prompt
+              const prompt = document.createElement("div");
+              prompt.classList.add("audio-prompt");
+              prompt.textContent = "Click here to play music!";
+              prompt.onclick = () => {
+                bgMusic.muted = false;
+                bgMusic.play()
+                  .then(() => {
+                    console.log("Audio played after user click");
+                    prompt.remove();
+                  })
+                  .catch((err) => console.log("Playback failed:", err));
+              };
+              exitContainer.appendChild(prompt);
             });
-          });
+        }
       });
 
       bgMusic.volume = 0.5;
 
       function goBack() {
+        console.log("Go Back clicked, stopping audio");
         bgMusic.pause();
         bgMusic.currentTime = 0;
         window.location.href = "envelope.html";
