@@ -167,7 +167,6 @@
       }
 
       .popup-header {
-        
         background-size: cover;
         padding: 16px;
         text-align: center;
@@ -216,6 +215,13 @@
         border-radius: 10px;
       }
 
+      .audio-prompt {
+        font-size: 1rem;
+        color: #666;
+        margin-top: 1rem;
+        animation: fadeInUp 1s ease;
+      }
+
       @keyframes fadeInUp {
         0% {
           opacity: 0;
@@ -254,6 +260,7 @@
 
     <!-- Audio -->
     <audio id="birthdayAudio" loop>
+      <!-- Update this path to the correct location of your audio file -->
       <source src="/happy-birthday-to-you-370804.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
@@ -282,83 +289,111 @@
         <p>
           Niza! (｡◕‿◕｡)
         </p>
+        <br>
         <p>
           It’s your birthday today. And no I haven’t forgotten. Even though we
           no longer speak, the date still lingers quietly in the back of my
           mind. I suppose it always will. So today, from a respectful distance,
           I’m whispering “Happy Birthday.” Not to disturb your peace or reopen
-          old doors  but simply to honor what once meant so much.
+          old doors but simply to honor what once meant so much.
         </p>
         <p>Make a wish. I hope it’s a meaningful one.</p>
+        <br>
         <p>
-          More than anything, I hope you’re doing well  truly. I hope that in
+          More than anything, I hope you’re doing well truly. I hope that in
           the silence of your battles, you’re learning to treat yourself with
-          patience and kindness. Life is rarely easy  it can be heavy,
-          complicated, and overwhelming  but I hope you’re finding your way
+          patience and kindness. Life is rarely easy it can be heavy,
+          complicated, and overwhelming but I hope you’re finding your way
           through it, even in the smallest steps. I hope that with time, you
           begin to see purpose in the struggles, and perhaps even moments of
           grace within them.
         </p>
+        <br>
         <p>
           So yes, happy birthday. I sincerely wish you nothing but the best as
-          you move forward. Keep going after your dreams  even slowly, even
+          you move forward. Keep going after your dreams even slowly, even
           uncertainly. I’ll always be rooting for you in quiet ways you’ll never
-          hear. Thank you for the memories  for every smile, every tear, every
+          hear. Thank you for the memories for every smile, every tear, every
           lesson. You made me feel deeply, and that’s something I’ll always be
           grateful for.
         </p>
+        <br>
         <p>
           We may not have ended as we once imagined, but part of me will always
-          admire the person you are  and perhaps the person you're still
+          admire the person you are and perhaps the person you're still
           becoming. Maybe one day our paths will cross again, gently, as
           friends… or simply as people who once knew each other well.
         </p>
+        <br>
         <p>
           I’m not writing this to reopen old wounds or stir up past feelings. I
           know we both have our own lives now, and that’s okay. I’m not asking
-          for anything in return  no replies, no rekindling of what was. This is
+          for anything in return no replies, no rekindling of what was. This is
           just a quiet acknowledgment of what we shared, and a wish for your
           happiness.
         </p>
+        <br>
         <p>
-          If I ever fell short, I’m sorry. But I believe we gave each other what
-          we could  the joy, the hurt, the growth. And now, with both grace and
-          finality, I’m releasing what’s left. This isn’t a doorway waiting to
-          be reopened — it’s the gentle closing of a chapter.
+          So here’s to you, Niza. May this year bring you closer to the dreams
+          you hold dear. May it be filled with moments that make your heart
+          smile, and may you find peace in the journey ahead.
         </p>
+        <br>
         <p>
           Please take care of yourself. I mean that more deeply than you know.
           Stay away from the things that steal your light. Guard your health.
           And if it’s not too much to ask, send my regards to your family 
-          especially to those who showed kindness to me.<br> Good Bye. <br> 
+          especially to those who showed kindness to me.
+          <br>
+          <br> Good Bye. <br> 
           <div style="text-align: right;">CHAO VISAL</div>
         </p>
-
       </div>
     </div>
 
     <!-- JS -->
     <script>
       const birthdayAudio = document.getElementById("birthdayAudio");
+      const popup = document.getElementById("popup");
 
       function openLetter() {
-        birthdayAudio.play().catch((error) => {
-          console.log("Audio playback failed:", error);
-        });
-        document.getElementById("popup").style.display = "block";
+        popup.style.display = "block";
+        const playPromise = birthdayAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log("Audio playback failed:", error);
+            // Show fallback prompt if autoplay fails
+            const prompt = document.createElement("div");
+            prompt.classList.add("audio-prompt");
+            prompt.textContent = "Click anywhere to play music!";
+            popup.appendChild(prompt);
+            document.body.addEventListener(
+              "click",
+              () => {
+                birthdayAudio.play().catch((err) =>
+                  console.log("Playback failed:", err)
+                );
+                prompt.remove();
+              },
+              { once: true }
+            );
+          });
+        }
       }
 
       function closeLetter() {
         birthdayAudio.pause();
         birthdayAudio.currentTime = 0;
-        document.getElementById("popup").style.display = "none";
+        popup.style.display = "none";
       }
 
       function noThanks() {
+        birthdayAudio.pause();
+        birthdayAudio.currentTime = 0;
         window.location.href = "try-again.html";
       }
 
-      // Optional: add floating hearts dynamically
+      // Add floating hearts dynamically
       const emojis = ["✉️", "🎂", "💥", "✨", "🎈"];
       for (let i = 0; i < 15; i++) {
         const heart = document.createElement("div");
